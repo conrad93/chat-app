@@ -1,1 +1,61 @@
-<p>home works!</p>
+<div class="containe-fluid p-2">
+    <div class="row custom-h">
+        <div class="col-md-3 p-3 custom-pos">
+            <div class="">
+                <input type="search" class="form-control" placeholder="Search"/>
+            </div>
+            <div class="">
+                <hr/>
+            </div>
+            <div>
+                <ul class="list-group">
+                    <li class="list-group-item active">An item <span class="badge rounded-pill text-bg-success">online</span></li>
+                    <li class="list-group-item">A second item <span class="badge rounded-pill text-bg-danger">offline</span></li>
+                    <li class="list-group-item">A third item</li>
+                    <li class="list-group-item">A fourth item</li>
+                    <li class="list-group-item">And a fifth one</li>
+                </ul>
+            </div>
+            <div class="">
+                <hr/>
+            </div>
+            <div class="custom-pos-btm">
+                <button type="button" class="btn btn-secondary">Logout</button>
+            </div>
+        </div>
+        <div class="col-md-9 custom-pos">
+            <ng-container *ngIf="!noChatSelected">
+                <div class="row mb-2">
+                    <div class="col-md-6">
+                      <small class="text-muted">user 12:23</small>
+                      <p class="bg-light rounded p-3 text-dark">
+                        Hi
+                      </p>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-md-6 offset-md-6">
+                      <small class="text-muted">user 12:23</small>
+                      <p class="bg-light rounded p-3 text-dark">
+                        Hi
+                      </p>
+                    </div>
+                </div>
+                <div class="row custom-pos-btm">
+                    <div class="col-md-10">
+                        <input type="text" class="form-control" placeholder="Message"/>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="button" class="btn btn-secondary">Send</button>
+                    </div>
+                </div>
+            </ng-container>
+            <ng-container *ngIf="noChatSelected">
+                <div class="p-3 text-center">
+                    <h4>Welcome</h4>
+                    <p>Select a chat</p>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+</div>
