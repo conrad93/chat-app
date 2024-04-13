@@ -23,7 +23,9 @@
                         </div>
                         <div class="row p-3">
                             <div class="col-md-12">
-                                <button [disabled]="!loginForm.valid" type="submit" class="btn btn-primary me-2">Login</button>
+                                <button [disabled]="!loginForm.valid || isLoading" type="submit" class="btn btn-primary me-2">
+                                    {{isLoading ? "Loading" : "Login"}}
+                                </button>
                             </div>
                         </div>
                         <div class="row p-3">

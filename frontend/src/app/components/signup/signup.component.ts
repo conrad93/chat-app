@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { BaseService } from 'src/app/services/base.service';
+import { ToastService } from 'src/app/services/toast.service';
 
 @Component({
   selector: 'app-signup',
@@ -7,13 +10,15 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
   styleUrls: ['./signup.component.scss']
 })
 export class SignupComponent {
+  
+  isLoading = false;
   loginForm: FormGroup;
 
-  constructor(private fb: FormBuilder){
+  constructor(private fb: FormBuilder, private toastService: ToastService, private baseService: BaseService, private router: Router){
     this.loginForm = this.fb.group({
       fullName: ['', [Validators.required]],
       gender: ['', [Validators.required]],
-      username: ['', [Validators.required, Validators.email]],
+      username: ['', [Validators.required]],
       password: ['', [
         Validators.required,
         Validators.minLength(8),
@@ -34,6 +39,23 @@ export class SignupComponent {
   }
 
   onSubmit(){
-    
+    this.isLoading = true;
+    this.baseService.postMethod(this.loginForm.value, "/api/auth/signup", {}).subscribe({
+      next: (res: any) => {
+        this.isLoading = false;
+        if(!res.error){
+          this.toastService.show({body: "Success", classname: "bg-success text-white", delay: 3000});
+          this.baseService.setLoggedInUser(res);
+          this.router.navigate(['/home']);
+        } else {
+          this.toastService.show({body: res.error, classname: "bg-danger text-white", delay: 3000});
+        }
+      },
+      error: (err) => {
+        this.isLoading = false;
+        this.toastService.show({body: "Server error", classname: "bg-danger text-white", delay: 3000});
+        console.error(err);
+      }
+    });
   }
 }
