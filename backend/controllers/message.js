@@ -23,7 +23,7 @@ const sendMessage = async (req, res) => {
             message
         });
         
-        if(!newMessage){
+        if(newMessage){
             conversation.messages.push(newMessage._id);
         }
 
