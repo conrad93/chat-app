@@ -1,6 +1,4 @@
 export class User {
-}
-export class Customer {
     public _id: string;
     public fullName: string;
     public password?: string;

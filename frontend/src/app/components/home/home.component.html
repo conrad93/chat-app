@@ -8,20 +8,20 @@
                 <div class="">
                     <hr/>
                 </div>
-                <div class="overflow-auto">
+                <div *ngIf="allUsers?.length" class="overflow-auto">
                     <ul class="list-group">
-                        <li class="list-group-item active">An item <span class="badge rounded-pill text-bg-success">online</span></li>
-                        <li class="list-group-item">A second item <span class="badge rounded-pill text-bg-danger">offline</span></li>
-                        <li class="list-group-item">A third item</li>
-                        <li class="list-group-item">A fourth item</li>
-                        <li class="list-group-item">And a fifth one</li>
+                        <ng-container *ngFor="let u of allUsers;">
+                            <li class="list-group-item">{{u.username}}</li>
+                        </ng-container>
+                        <!-- <li class="list-group-item active">An item <span class="badge rounded-pill text-bg-success">online</span></li> -->
+                        <!-- <li class="list-group-item">A second item <span class="badge rounded-pill text-bg-danger">offline</span></li> -->
                     </ul>
                 </div>
-                <div class="">
+                <div *ngIf="allUsers?.length" class="">
                     <hr/>
                 </div>
                 <div class="mt-auto">
-                    <button type="button" class="btn btn-secondary">Logout</button>
+                    <button (click)="logout()" type="button" class="btn btn-secondary">Logout</button>
                 </div>
             </div>
         </div>
@@ -58,7 +58,7 @@
             </ng-container>
             <ng-container *ngIf="noChatSelected">
                 <div class="p-3 text-center">
-                    <h4>Welcome</h4>
+                    <h4>Welcome {{user ? user.username : ""}}</h4>
                     <p>Select a chat</p>
                 </div>
             </ng-container>

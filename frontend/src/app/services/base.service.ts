@@ -22,6 +22,10 @@ export class BaseService {
     return val ? JSON.parse(val) : null;
   }
 
+  deleteLocalStorage(key: string){
+    localStorage.removeItem(key);
+  }
+
   setLocalStorage(key: string, body: User){
     let val = JSON.stringify(body);
     localStorage.setItem(key, val);

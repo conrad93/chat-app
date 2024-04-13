@@ -9,11 +9,11 @@ const login = async (req, res) => {
         const user = await User.findOne({username});
         const isPasswordCorrect = await bcrypt.compare(password, user?.password || '');
 
-        if(!user || isPasswordCorrect){
+        if(!user || !isPasswordCorrect){
             return res.status(400).json({error: "Invalid username or password"});
         }
         
-        generateTokenAndSetCookie(newUser._id, res);
+        generateTokenAndSetCookie(user._id, res);
         
         res.status(200).json({
             _id: user._id,
