@@ -55,7 +55,7 @@
                     </div>
                     <div class="row mt-auto">
                         <div class="col-md-10">
-                            <input [(ngModel)]="message" type="text" class="form-control" placeholder="Message"/>
+                            <input [(ngModel)]="message" (keyup.enter)="sendMessage()" type="text" class="form-control" placeholder="Message"/>
                         </div>
                         <div class="col-md-2">
                             <button [disabled]="!message || isLoading" (click)="sendMessage()" type="button" class="btn btn-secondary">

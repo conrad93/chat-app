@@ -19,6 +19,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   allUsers: User[] = [];
   filteredUsers: User[] = [];
   selectedUser: User | null = null;
+  onlineUsers: string[] = [];
   message: string = '';
   search: string = '';
   messages: any[] = [];
@@ -41,10 +42,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   getUsers(){
     let sub = this.baseService.getMethod("/api/users", {}).subscribe({
       next: (res: any) => {
-        console.log(res);
         if(!res.error){
           this.allUsers = res;
           this.filteredUsers = res;
+          this.setOnlineStatus();
         } else {
           this.toastService.show({body: res.error, classname: "bg-danger text-white", delay: 3000});
         }
@@ -98,28 +99,30 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   sendMessage(){
-    this.isLoading = true;
-    let req = {
-      message: this.message
-    };
-    let sub = this.baseService.postMethod(req, "/api/messages/send/" + this.selectedUser?._id, {}).subscribe({
-      next: (res: any) => {
-        this.isLoading = false;
-        if(!res.error){
-          this.message = '';
-          this.messages.push(res);
-          setTimeout(() => this.scrollToBottom(), 0);
-        } else {
-          this.toastService.show({body: res.error, classname: "bg-danger text-white", delay: 3000});
+    if(this.message){
+      this.isLoading = true;
+      let req = {
+        message: this.message
+      };
+      let sub = this.baseService.postMethod(req, "/api/messages/send/" + this.selectedUser?._id, {}).subscribe({
+        next: (res: any) => {
+          this.isLoading = false;
+          if(!res.error){
+            this.message = '';
+            this.messages.push(res);
+            setTimeout(() => this.scrollToBottom(), 0);
+          } else {
+            this.toastService.show({body: res.error, classname: "bg-danger text-white", delay: 3000});
+          }
+        },
+        error: (err) => {
+          this.isLoading = false;
+          this.toastService.show({body: "Server error", classname: "bg-danger text-white", delay: 3000});
+          console.error(err);
         }
-      },
-      error: (err) => {
-        this.isLoading = false;
-        this.toastService.show({body: "Server error", classname: "bg-danger text-white", delay: 3000});
-        console.error(err);
-      }
-    });
-    this.subscriptions.push(sub);
+      });
+      this.subscriptions.push(sub);
+    }
   }
 
   logout(){
@@ -143,26 +146,32 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.subscriptions.push(sub);
   }
 
+  setOnlineStatus(){
+    this.allUsers.forEach(e => {
+      if(this.onlineUsers.includes(e._id)){ 
+        e.isOnline = true;
+      } else {
+        e.isOnline = false;
+      }
+    });
+    this.filteredUsers.forEach(e => {
+      if(this.onlineUsers.includes(e._id)){ 
+        e.isOnline = true;
+      } else {
+        e.isOnline = false;
+      }
+    });
+  }
+
   getOnlineUsers(){
     let sub = this.socketService.getOnlineUsers().subscribe({
       next: (res: any) => {
-        console.log("getOnlineUsers > ", res);
         if(res?.length){
-          this.allUsers.forEach(e => {
-            if(res.includes(e._id)){ 
-              e.isOnline = true;
-            } else {
-              e.isOnline = false;
-            }
-          });
-          this.filteredUsers.forEach(e => {
-            if(res.includes(e._id)){ 
-              e.isOnline = true;
-            } else {
-              e.isOnline = false;
-            }
-          });
+          this.onlineUsers = res;
+        } else {
+          this.onlineUsers = [];
         }
+        this.setOnlineStatus();
       },
       error: err => console.log(err)
     });
