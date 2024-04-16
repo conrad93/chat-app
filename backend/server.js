@@ -5,7 +5,7 @@ const cookieParser = require("cookie-parser");
 dotenv.config();
 const PORT = process.env.PORT || 5000;
 const connectMongoDB = require("./db/connectDB");
-const app = express();
+const {app, server} = require("./socket/socket");
 app.use(express.json());
 app.use(cookieParser());
 
@@ -21,7 +21,7 @@ app.get("/", (req, res) => {
     res.send("Hello World!");
 });
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
     connectMongoDB();
     console.log(`Server running on port ${PORT}`);
 });
