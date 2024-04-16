@@ -1,6 +1,6 @@
-<div class="container-fluid">
-    <div class="row vertical-h-95">
-        <div class="col-md-3 p-3 h-100">
+<div class="container-fluid vertical-h">
+    <div class="row h-100">
+        <div class="col-md-3 p-3 h-100 border-end">
             <div class="h-100 d-flex flex-column">
                 <div class="">
                     <input [(ngModel)]="search" (input)="filterUser()" type="search" class="form-control" placeholder="Search"/>
@@ -9,15 +9,15 @@
                     <hr/>
                 </div>
                 <div *ngIf="filteredUsers?.length" class="overflow-auto flex-grow-1">
-                    <ul class="list-group list-group-flush">
+                    <div class="list-group list-group-flush">
                         <ng-container *ngFor="let u of filteredUsers;">
-                            <li (click)="setUser(u)" class="cursor-pointer list-group-item {{selectedUser?._id === u._id ? 'active' : ''}}">
+                            <a (click)="setUser(u)" class="cursor-pointer rounded list-group-item list-group-item-action {{selectedUser?._id === u._id ? 'active' : ''}}">
                                 {{u.fullName}} 
                                 <span *ngIf="u.isOnline" class="badge rounded-pill text-bg-success">online</span>
                                 <span *ngIf="!u.isOnline" class="badge rounded-pill text-bg-danger">offline</span>
-                            </li>
+                            </a>
                         </ng-container>
-                    </ul>
+                    </div>
                 </div>
                 <div *ngIf="filteredUsers?.length" class="">
                     <hr/>
@@ -27,13 +27,13 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-9 h-100">
+        <div class="col-md-9 p-3 h-100">
             <ng-container *ngIf="selectedUser">
                 <div class="h-100 d-flex flex-column">
-                    <div class="bg-secondary text-white px-4 py-2 mb-2">
+                    <div class="bg-secondary text-white rounded px-4 py-2 mb-2">
                         To: {{selectedUser.fullName}}
                     </div>
-                    <div class="overflow-auto flex-grow-1" #scrollMe>
+                    <div class="overflow-auto flex-grow-1 mb-2" #scrollMe>
                         <ng-container *ngFor="let msg of messages;">
                             <div *ngIf="msg.senderId === selectedUser._id" class="d-flex align-items-center justify-content-start mb-2">
                                 <div class="rounded">
@@ -53,16 +53,12 @@
                             </div>
                         </ng-container>
                     </div>
-                    <div class="row mt-auto">
-                        <div class="col-md-10">
-                            <input [(ngModel)]="message" (keyup.enter)="sendMessage()" type="text" class="form-control" placeholder="Message"/>
-                        </div>
-                        <div class="col-md-2">
-                            <button [disabled]="!message || isLoading" (click)="sendMessage()" type="button" class="btn btn-secondary">
-                                {{isLoading ? 'Loading' : 'Send'}}
-                            </button>
-                        </div>
-                    </div>
+                    <div class="input-group mt-auto">
+                        <input [(ngModel)]="message" (keyup.enter)="sendMessage()" type="text" class="form-control" placeholder="Message"/>
+                        <button [disabled]="!message || isLoading" (click)="sendMessage()" type="button" class="btn btn-outline-secondary">
+                            {{isLoading ? 'Loading' : 'Send'}}
+                        </button>
+                      </div>
                 </div>
             </ng-container>
             <ng-container *ngIf="!selectedUser">
