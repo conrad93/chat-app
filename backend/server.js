@@ -17,8 +17,10 @@ app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
 app.use("/api/users", userRoutes);
 
-app.get("/", (req, res) => {
-    res.send("Hello World!");
+app.use(express.static(path.resolve(__dirname, "../frontend/dist/chat-app")));
+
+app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "../frontend/dist/chat-app/index.html"));
 });
 
 server.listen(PORT, () => {
