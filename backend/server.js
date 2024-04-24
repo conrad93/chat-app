@@ -9,6 +9,7 @@ const connectMongoDB = require("./db/connectDB");
 const {app, server} = require("./socket/socket");
 app.use(express.json());
 app.use(cookieParser());
+app.use(express.static(path.resolve(__dirname, "../frontend/dist/chat-app")));
 
 const authRoutes = require("./routes/auth");
 const messageRoutes = require("./routes/message");
@@ -18,7 +19,6 @@ app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
 app.use("/api/users", userRoutes);
 
-app.use(express.static(path.resolve(__dirname, "../frontend/dist/chat-app")));
 
 app.get("*", (req, res) => {
     res.sendFile(path.resolve(__dirname, "../frontend/dist/chat-app/index.html"));
