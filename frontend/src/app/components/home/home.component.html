@@ -38,27 +38,37 @@
                             <div *ngIf="msg.senderId === selectedUser._id" class="d-flex align-items-center justify-content-start mb-2">
                                 <div class="rounded">
                                   <small class="text-muted">{{msg.createdAt | date: 'hh:mm'}}</small>
-                                  <p class="bg-light rounded p-3 text-dark">
+                                  <p *ngIf="!msg.isImage" class="bg-light rounded p-3 text-dark">
                                     {{msg.message}}
                                   </p>
+                                  <div *ngIf="msg.isImage">
+                                    <img src="/api/messages/showimage/{{msg.message}}" class="app-img-size img-thumbnail" alt="image">
+                                  </div>
                                 </div>
                             </div>
                             <div *ngIf="msg.senderId === user?._id" class="d-flex align-items-center justify-content-end mb-2">
                                 <div class="rounded">
                                   <small class="text-muted">{{msg.createdAt | date: 'hh:mm'}}</small>
-                                  <p class="bg-light rounded p-3 text-dark">
+                                  <p *ngIf="!msg.isImage" class="bg-light rounded p-3 text-dark">
                                     {{msg.message}}
                                   </p>
+                                  <div *ngIf="msg.isImage">
+                                    <img src="/api/messages/showimage/{{msg.message}}" class="app-img-size img-thumbnail" alt="image">
+                                  </div>
                                 </div>
                             </div>
                         </ng-container>
                     </div>
                     <div class="input-group mt-auto">
+                        <button [disabled]="isLoading" (click)="imageInput.click()" type="button" class="btn btn-outline-secondary">
+                            Image
+                        </button>
                         <input [(ngModel)]="message" (keyup.enter)="sendMessage()" type="text" class="form-control" placeholder="Message"/>
                         <button [disabled]="!message || isLoading" (click)="sendMessage()" type="button" class="btn btn-outline-secondary">
                             {{isLoading ? 'Loading' : 'Send'}}
                         </button>
-                      </div>
+                    </div>
+                    <input type="file" #imageInput (change)="openImageModal($event, content)" class="d-none" accept="image/*"/>
                 </div>
             </ng-container>
             <ng-container *ngIf="!selectedUser">
@@ -70,3 +80,18 @@
         </div>
     </div>
 </div>
+
+<ng-template #content let-modal>
+	<div class="modal-header">
+		<h4 class="modal-title" id="modal-basic-title">Image</h4>
+		<button type="button" class="btn-close" aria-label="Close" (click)="modal.close('close')"></button>
+	</div>
+	<div class="modal-body">
+        <div class="d-flex justify-content-center align-items-center">
+            <img src="{{imageUrl}}" class="app-img-size img-thumbnail" alt="image">
+        </div>
+	</div>
+	<div class="modal-footer">
+		<button type="button" class="btn btn-outline-secondary" (click)="modal.close('send')">Send</button>
+	</div>
+</ng-template>
