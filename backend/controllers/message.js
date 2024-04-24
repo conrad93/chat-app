@@ -4,11 +4,12 @@ const { getReceiverSocketId, io } = require("../socket/socket");
 const Bucket = require("../utils/bucket");
 const path = require("path");
 const mime = require("mime-types");
-const { response } = require("express");
+const {encrypt, decrypt} = require("../utils/cryptography");
 
 const sendMessage = async (req, res) => {
     try {
         const {message} = req.body;
+        const decryptedMessage = decrypt(message);
         const {id: receiverId} = req.params;
         const senderId = req.user._id;
 
@@ -25,7 +26,7 @@ const sendMessage = async (req, res) => {
         const newMessage = new Message({
             senderId,
             receiverId,
-            message
+            message: decryptedMessage
         });
         
         if(newMessage){
@@ -39,7 +40,7 @@ const sendMessage = async (req, res) => {
             io.to(receiverSocketId).emit("newMessage", newMessage);
         }
         
-        res.status(201).json(newMessage);
+        res.status(201).json(encrypt(JSON.stringify(newMessage)));
 
     } catch (error) {
         console.log("Error in sendMessage", error.message);
@@ -138,7 +139,9 @@ const getMessages = async (req, res) => {
         
         if(!conversation) return res.status(200).json([]);
 
-        res.status(200).json(conversation.messages);
+        let messages = conversation.messages.map(message => encrypt(JSON.stringify(message)));
+
+        res.status(200).json(messages);
 
     } catch (error) {
         console.log("Error in getMessages", error.message);
