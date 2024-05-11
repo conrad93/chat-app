@@ -1,97 +1,10 @@
 <div class="container-fluid vertical-h">
     <div class="row h-100">
         <div class="col-md-3 p-3 h-100 border-end">
-            <div class="h-100 d-flex flex-column">
-                <div class="">
-                    <input [(ngModel)]="search" (input)="filterUser()" type="search" class="form-control" placeholder="Search"/>
-                </div>
-                <div class="">
-                    <hr/>
-                </div>
-                <div *ngIf="filteredUsers?.length" class="overflow-auto flex-grow-1">
-                    <div class="list-group list-group-flush">
-                        <ng-container *ngFor="let u of filteredUsers;">
-                            <a (click)="setUser(u)" class="cursor-pointer rounded list-group-item list-group-item-action {{selectedUser?._id === u._id ? 'active' : ''}}">
-                                {{u.fullName}} 
-                                <span *ngIf="u.isOnline" class="badge rounded-pill text-bg-success">online</span>
-                                <span *ngIf="!u.isOnline" class="badge rounded-pill text-bg-danger">offline</span>
-                            </a>
-                        </ng-container>
-                    </div>
-                </div>
-                <div *ngIf="filteredUsers?.length" class="">
-                    <hr/>
-                </div>
-                <div class="mt-auto">
-                    <button (click)="logout()" type="button" class="btn btn-secondary">Logout</button>
-                </div>
-            </div>
+            <app-sidebar></app-sidebar>
         </div>
         <div class="col-md-9 p-3 h-100">
-            <ng-container *ngIf="selectedUser">
-                <div class="h-100 d-flex flex-column">
-                    <div class="bg-secondary text-white rounded px-4 py-2 mb-2">
-                        To: {{selectedUser.fullName}}
-                    </div>
-                    <div class="overflow-auto flex-grow-1 mb-2" #scrollMe>
-                        <ng-container *ngFor="let msg of messages;">
-                            <div *ngIf="msg.senderId === selectedUser._id" class="d-flex align-items-center justify-content-start mb-2">
-                                <div class="rounded">
-                                  <small class="text-muted">{{msg.createdAt | date: 'hh:mm'}}</small>
-                                  <p *ngIf="!msg.isImage" class="bg-light rounded p-3 text-dark">
-                                    {{msg.message}}
-                                  </p>
-                                  <div *ngIf="msg.isImage">
-                                    <img src="/api/messages/showimage/{{msg.message}}" class="app-img-size img-thumbnail" alt="image">
-                                  </div>
-                                </div>
-                            </div>
-                            <div *ngIf="msg.senderId === user?._id" class="d-flex align-items-center justify-content-end mb-2">
-                                <div class="rounded">
-                                  <small class="text-muted">{{msg.createdAt | date: 'hh:mm'}}</small>
-                                  <p *ngIf="!msg.isImage" class="bg-light rounded p-3 text-dark">
-                                    {{msg.message}}
-                                  </p>
-                                  <div *ngIf="msg.isImage">
-                                    <img src="/api/messages/showimage/{{msg.message}}" class="app-img-size img-thumbnail" alt="image">
-                                  </div>
-                                </div>
-                            </div>
-                        </ng-container>
-                    </div>
-                    <div class="input-group mt-auto">
-                        <button [disabled]="isLoading" (click)="imageInput.click()" type="button" class="btn btn-outline-secondary">
-                            Image
-                        </button>
-                        <input [(ngModel)]="message" (keyup.enter)="sendMessage()" type="text" class="form-control" placeholder="Message"/>
-                        <button [disabled]="!message || isLoading" (click)="sendMessage()" type="button" class="btn btn-outline-secondary">
-                            {{isLoading ? 'Loading' : 'Send'}}
-                        </button>
-                    </div>
-                    <input type="file" #imageInput (change)="openImageModal($event, content)" class="d-none" accept="image/*"/>
-                </div>
-            </ng-container>
-            <ng-container *ngIf="!selectedUser">
-                <div class="p-3 text-center">
-                    <h4>Welcome {{user ? user.fullName : ""}}</h4>
-                    <p>Select a chat</p>
-                </div>
-            </ng-container>
+            <app-selected-user></app-selected-user>
         </div>
     </div>
 </div>
-
-<ng-template #content let-modal>
-	<div class="modal-header">
-		<h4 class="modal-title" id="modal-basic-title">Image</h4>
-		<button type="button" class="btn-close" aria-label="Close" (click)="modal.close('close')"></button>
-	</div>
-	<div class="modal-body">
-        <div class="d-flex justify-content-center align-items-center">
-            <img src="{{imageUrl}}" class="app-img-size img-thumbnail" alt="image">
-        </div>
-	</div>
-	<div class="modal-footer">
-		<button type="button" class="btn btn-outline-secondary" (click)="modal.close('send')">Send</button>
-	</div>
-</ng-template>

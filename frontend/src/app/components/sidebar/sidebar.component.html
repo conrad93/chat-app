@@ -1,0 +1,25 @@
+<div class="h-100 d-flex flex-column">
+    <div class="">
+        <input name="search" [(ngModel)]="search" (input)="filterUser()" type="search" class="form-control" placeholder="Search"/>
+    </div>
+    <div class="">
+        <hr/>
+    </div>
+    <div *ngIf="filteredUsers?.length" class="overflow-auto flex-grow-1">
+        <div class="list-group list-group-flush">
+            <ng-container *ngFor="let u of filteredUsers;">
+                <a (click)="setUser(u)" class="cursor-pointer rounded list-group-item list-group-item-action {{selectedUser?._id === u._id ? 'active' : ''}}">
+                    {{u.fullName}} 
+                    <span *ngIf="u.isOnline" class="badge rounded-pill text-bg-success">online</span>
+                    <span *ngIf="!u.isOnline" class="badge rounded-pill text-bg-danger">offline</span>
+                </a>
+            </ng-container>
+        </div>
+    </div>
+    <div *ngIf="filteredUsers?.length" class="">
+        <hr/>
+    </div>
+    <div class="mt-auto">
+        <button (click)="logout()" type="button" class="btn btn-secondary">Logout</button>
+    </div>
+</div>

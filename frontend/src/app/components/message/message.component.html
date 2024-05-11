@@ -1,0 +1,11 @@
+<div class="d-flex align-items-center {{msg.senderId === user?._id ? 'justify-content-end' : 'justify-content-start'}} mb-2">
+    <div class="rounded">
+      <small class="text-muted">{{msg.createdAt | date: 'hh:mm'}}</small>
+      <p *ngIf="!msg.isImage" class="bg-light rounded p-3 text-dark">
+        {{msg.message}}
+      </p>
+      <div *ngIf="msg.isImage">
+        <img src="/api/messages/showimage/{{msg.message}}" class="img-size img-thumbnail" alt="image">
+      </div>
+    </div>
+</div>

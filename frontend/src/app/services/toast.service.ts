@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 export interface ToastInfo {
-  classname: string;
+  classnames: string;
   body: string;
   delay?: number;
 }

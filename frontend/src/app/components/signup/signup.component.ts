@@ -44,16 +44,16 @@ export class SignupComponent {
       next: (res: any) => {
         this.isLoading = false;
         if(!res.error){
-          this.toastService.show({body: "Success", classname: "bg-success text-white", delay: 3000});
+          this.toastService.show({body: "Success", classnames: "bg-success text-white", delay: 3000});
           this.baseService.setLoggedInUser(res);
           this.router.navigate(['/home']);
         } else {
-          this.toastService.show({body: res.error, classname: "bg-danger text-white", delay: 3000});
+          this.toastService.show({body: res.error, classnames: "bg-danger text-white", delay: 3000});
         }
       },
       error: (err) => {
         this.isLoading = false;
-        this.toastService.show({body: "Server error", classname: "bg-danger text-white", delay: 3000});
+        this.toastService.show({body: "Server error", classnames: "bg-danger text-white", delay: 3000});
         console.error(err);
       }
     });

@@ -9,6 +9,7 @@ import { HttpClient } from '@angular/common/http';
 export class BaseService {
 
   loggedInUser = new BehaviorSubject<User | null>(this.getLocalStorage("chat-user"));
+  selectedUser = new BehaviorSubject<User | null>(null);
 
   constructor(private http: HttpClient) { }
 
@@ -37,6 +38,10 @@ export class BaseService {
 
   getMethod(url: string, header: any){
     return this.http.get(url, header);
+  }
+
+  setSelectedUser(data: User | null){
+    this.selectedUser.next(data);
   }
 
 }

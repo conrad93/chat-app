@@ -11,6 +11,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { ToastComponent } from './components/toast/toast.component';
+import { MessageComponent } from './components/message/message.component';
+import { SelectedUserComponent } from './components/selected-user/selected-user.component';
+import { SidebarComponent } from './components/sidebar/sidebar.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +21,10 @@ import { ToastComponent } from './components/toast/toast.component';
     LoginComponent,
     HomeComponent,
     SignupComponent,
-    ToastComponent
+    ToastComponent,
+    MessageComponent,
+    SelectedUserComponent,
+    SidebarComponent
   ],
   imports: [
     BrowserModule,
