@@ -15,7 +15,6 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
   private subscriptions: Subscription[] = [];
   @ViewChild('localVideo', {static: false}) localVideo?: ElementRef<HTMLVideoElement>;
   @ViewChild('remoteVideo', {static: false}) remoteVideo?: ElementRef<HTMLVideoElement>;
-  private peerConnections: Map<string, RTCPeerConnection> = new Map();
   private peerConnection!: RTCPeerConnection;
   private localStream!: MediaStream;
   private remoteStream!: MediaStream;
@@ -110,7 +109,8 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     if(data?.signal?.type === 'candidate'){
-      if(this.peerConnection){
+      if(this.peerConnection?.remoteDescription?.type){
+        console.log(data?.signal?.candidate)
         this.peerConnection.addIceCandidate(data?.signal?.candidate)
       }
     }
