@@ -14,6 +14,8 @@ import { ToastComponent } from './components/toast/toast.component';
 import { MessageComponent } from './components/message/message.component';
 import { SelectedUserComponent } from './components/selected-user/selected-user.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
+import { ConferenceComponent } from './components/conference/conference.component';
+import { RoomComponent } from './components/room/room.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +26,9 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
     ToastComponent,
     MessageComponent,
     SelectedUserComponent,
-    SidebarComponent
+    SidebarComponent,
+    ConferenceComponent,
+    RoomComponent
   ],
   imports: [
     BrowserModule,

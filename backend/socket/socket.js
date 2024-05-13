@@ -22,6 +22,23 @@ io.on('connection', (socket) => {
     if(userId != 'undefined') userSocketMap[userId] = socket.id;
 
     io.emit("getOnlineUsers", Object.keys(userSocketMap));
+    
+    socket.on('joinRoom', (data) => {
+        socket.join(data.roomId);
+        
+        io.to(data.roomId).emit('roomJoined', data);
+    });
+
+    socket.on('leaveRoom', (data) => {
+        socket.leave(data.roomId);
+    
+        io.to(data.roomId).emit('roomLeft', data);
+    });
+
+    socket.on('signal', (data) => {
+        let receiverSocketId = getReceiverSocketId(data.to);
+        if(receiverSocketId) io.to(receiverSocketId).emit('signal', { from: data.from, signal: data.signal });
+    });
 
     socket.on('disconnect', () => {
         console.log("User disconnected ", socket.id);

@@ -121,7 +121,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
     this.subscriptions.push(sub);
   }
 
-  @HostListener('window:unload', ['$event'])
+  @HostListener('window:beforeunload', ['$event'])
   handleUnload($event: any) {
     this.handleDestroy();
   }
@@ -129,7 +129,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
   handleDestroy(){
     this.subscriptions.forEach(s => s.unsubscribe());
     this.socketService.closeSocketEvent("getOnlineUsers");
-    this.socketService.closeConnection();
   }
 
   ngOnDestroy(): void {

@@ -1,0 +1,12 @@
+<div class="container-fluid vertical-h">
+    <div id="videos" class="h-100">
+        <video class="video-player" #localVideo id="localVideo" autoplay playsInline></video>
+        <video class="video-player" #remoteVideo id="remoteVideo" autoplay playsInline></video>
+    </div>
+
+    <div id="controls" class="btn-group" role="group" aria-label="button group">
+        <button type="button" class="btn btn-{{cameraBtnBgClass}}">Camera</button>
+        <button type="button" class="btn btn-{{micBtnBgClass}}">Mic</button>
+        <button type="button" class="btn btn-danger">Leave</button>
+    </div>
+</div>

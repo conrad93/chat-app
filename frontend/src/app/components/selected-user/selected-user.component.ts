@@ -191,7 +191,7 @@ export class SelectedUserComponent implements OnInit, OnDestroy {
     this.subscriptions.push(sub);
   }
 
-  @HostListener('window:unload', ['$event'])
+  @HostListener('window:beforeunload', ['$event'])
   handleUnload($event: any) {
     this.handleDestroy();
   }
