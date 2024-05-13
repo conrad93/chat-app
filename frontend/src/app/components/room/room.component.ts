@@ -109,8 +109,7 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     if(data?.signal?.type === 'candidate'){
-      if(this.peerConnection?.remoteDescription?.type){
-        console.log(data?.signal?.candidate)
+      if(this.peerConnection){
         this.peerConnection.addIceCandidate(data?.signal?.candidate)
       }
     }
@@ -139,9 +138,11 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
     });
 
     this.peerConnection.ontrack = (event) => {
-      event.streams[0].getTracks().forEach((track) => {
-        this.remoteStream.addTrack(track)
-      });
+      if(event?.streams?.[0]){
+        event.streams[0].getTracks().forEach((track) => {
+          this.remoteStream.addTrack(track)
+        });
+      }
     };
 
     this.peerConnection.onicecandidate = async (event) => {
