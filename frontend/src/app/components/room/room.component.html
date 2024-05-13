@@ -5,8 +5,8 @@
     </div>
 
     <div id="controls" class="btn-group" role="group" aria-label="button group">
-        <button type="button" class="btn btn-{{cameraBtnBgClass}}">Camera</button>
-        <button type="button" class="btn btn-{{micBtnBgClass}}">Mic</button>
-        <button type="button" class="btn btn-danger">Leave</button>
+        <button (click)="toggleCamera()" type="button" class="btn btn-{{cameraBtnBgClass}}">Camera</button>
+        <button (click)="toggleMic()" type="button" class="btn btn-{{micBtnBgClass}}">Mic</button>
+        <button (click)="leaveChannel()" type="button" class="btn btn-danger">Leave</button>
     </div>
 </div>

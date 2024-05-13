@@ -55,6 +55,9 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
     this.roomId = this.route.snapshot.paramMap.get('roomId') || '';
     if(this.roomId) {
       this.socketService.joinRoom({roomId: this.roomId, userId: this.user?._id});
+      this.newJoiner();
+      this.exitJoiner();
+      this.getSignal();
     }
   }
 
@@ -94,14 +97,10 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
     this.localStream = await navigator.mediaDevices.getUserMedia(this.constraints);
     if (this.localVideo) {
       this.localVideo.nativeElement.srcObject = this.localStream;
-      this.newJoiner();
-      this.exitJoiner();
-      this.getSignal();
     }
   }
 
   handleSignal(data: any) {
-    console.log('Signal: ', data);
     if(data?.signal?.type === 'offer'){
       this.createAnswer(data.from, data?.signal?.offer)
     }
@@ -111,9 +110,9 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     if(data?.signal?.type === 'candidate'){
-        if(this.peerConnection){
-          this.peerConnection.addIceCandidate(data?.signal?.candidate)
-        }
+      if(this.peerConnection){
+        this.peerConnection.addIceCandidate(data?.signal?.candidate)
+      }
     }
   }
 
@@ -129,7 +128,7 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
     if(this.localVideo) this.localVideo.nativeElement.classList.add('smallFrame');
 
     if(!this.localStream){
-      this.localStream = await navigator.mediaDevices.getUserMedia({video:true, audio:false});
+      this.localStream = await navigator.mediaDevices.getUserMedia({video:true, audio:true});
       if(this.localVideo) {
         this.localVideo.nativeElement.srcObject = this.localStream;
       }
@@ -158,7 +157,6 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
     let offer = await this.peerConnection.createOffer();
     await this.peerConnection.setLocalDescription(offer)
 
-    console.log({to: userId, signal: { type: 'offer', offer: offer }});
     this.socketService.sendSignal({to: userId, from: this.user?._id, signal: { type: 'offer', offer: offer }});
   }
 
@@ -180,7 +178,6 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   handleNewJoiner(data: any) {
-    console.log('New joiner: ', data);
     if(data.userId === this.user?._id){
       return;
     }
@@ -193,6 +190,10 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   leaveChannel = async () => {
+    if(this.peerConnection) this.peerConnection.close();
+    this.localStream.getTracks().forEach((track) => {
+      track.stop();
+    });
     this.socketService.leaveRoom({roomId: this.roomId, userId: this.user?._id});
     this.router.navigate(['/conference']);
   }
