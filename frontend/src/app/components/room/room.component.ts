@@ -52,12 +52,9 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit(): void {
     this.roomId = this.route.snapshot.paramMap.get('roomId') || '';
-    if(this.roomId) {
-      this.socketService.joinRoom({roomId: this.roomId, userId: this.user?._id});
-      this.newJoiner();
-      this.exitJoiner();
-      this.getSignal();
-    }
+    this.newJoiner();
+    this.exitJoiner();
+    this.getSignal();
   }
 
   ngAfterViewInit(): void {
@@ -97,9 +94,13 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.localVideo) {
       this.localVideo.nativeElement.srcObject = this.localStream;
     }
+    if(this.roomId) {
+      this.socketService.joinRoom({roomId: this.roomId, userId: this.user?._id});
+    }
   }
 
   handleSignal(data: any) {
+    console.log("signal", data);
     if(data?.signal?.type === 'offer'){
       this.createAnswer(data.from, data?.signal?.offer)
     }
@@ -179,6 +180,7 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   handleNewJoiner(data: any) {
+    console.log("new joiner", data);
     if(data.userId === this.user?._id){
       return;
     }
