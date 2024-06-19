@@ -18,6 +18,7 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
   private peerConnection!: RTCPeerConnection;
   private localStream!: MediaStream;
   private remoteStream!: MediaStream;
+  private mediaRecorder!: MediaRecorder;
   private servers = {
     iceServers: [
       {
@@ -41,6 +42,8 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
   };
   cameraBtnBgClass = 'primary';
   micBtnBgClass = 'primary';
+  isRecording = false;
+  recordedChunks: any[] = [];
 
   constructor(private route: ActivatedRoute, private router: Router, private socketService: SocketService, private baseService: BaseService) {
     this.baseService.loggedInUser.subscribe({
@@ -227,6 +230,40 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
         this.micBtnBgClass = 'primary';
       }
     }
+  }
+
+  async recordSession() {
+    this.isRecording = !this.isRecording;
+    if(this.isRecording) {
+      const stream = await navigator.mediaDevices.getDisplayMedia({ video: true, audio: true });
+      this.mediaRecorder = new MediaRecorder(stream);
+
+      this.mediaRecorder.ondataavailable = this.handleDataAvailable.bind(this);
+      this.mediaRecorder.onstop = this.uploadRecording.bind(this);
+      
+      this.mediaRecorder.start();
+    } else {
+      this.mediaRecorder.stop();
+    }
+  }
+
+  handleDataAvailable(event: any) {
+    if (event.data.size > 0) {
+      this.recordedChunks.push(event.data);
+    }
+  }
+
+  async uploadRecording() {
+    const blob = new Blob(this.recordedChunks, {
+      type: 'video/webm'
+    });
+
+    const formData = new FormData();
+    formData.append('video', blob);
+    formData.append('roomId', this.roomId);
+    // this.baseService
+
+    this.recordedChunks = [];
   }
 
   ngOnDestroy(): void {

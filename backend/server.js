@@ -14,10 +14,12 @@ app.use(express.static(path.resolve(__dirname, "../frontend/dist/chat-app")));
 const authRoutes = require("./routes/auth");
 const messageRoutes = require("./routes/message");
 const userRoutes = require("./routes/user");
+const fileRoutes = require("./routes/file");
 
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/file", fileRoutes);
 
 
 app.get("*", (req, res) => {
