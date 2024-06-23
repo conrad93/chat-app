@@ -96,6 +96,8 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
     this.localStream = await navigator.mediaDevices.getUserMedia(this.constraints);
     if (this.localVideo) {
       this.localVideo.nativeElement.srcObject = this.localStream;
+      this.localVideo.nativeElement.muted = true;
+      this.localVideo.nativeElement.volume = 0;
     }
     if(this.roomId) {
       this.socketService.joinRoom({roomId: this.roomId, userId: this.user?._id});
@@ -131,9 +133,11 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
     if(this.localVideo) this.localVideo.nativeElement.classList.add('smallFrame');
 
     if(!this.localStream){
-      this.localStream = await navigator.mediaDevices.getUserMedia({video:true, audio:true});
+      this.localStream = await navigator.mediaDevices.getUserMedia(this.constraints);
       if(this.localVideo) {
         this.localVideo.nativeElement.srcObject = this.localStream;
+        this.localVideo.nativeElement.muted = true;
+        this.localVideo.nativeElement.volume = 0;
       }
     }
 
