@@ -9,15 +9,11 @@
             </ng-container>
         </div>
         <div class="input-group mt-auto">
-            <button [disabled]="isLoading" (click)="imageInput.click()" type="button" class="btn btn-outline-secondary">
-                Image
-            </button>
-            <input name="message" [(ngModel)]="message" (keyup.enter)="sendMessage()" type="text" class="form-control" placeholder="Message"/>
+            <input name="message" [(ngModel)]="message" (keyup.enter)="sendMessage()" type="text" class="form-control" placeholder="Message" autocomplete="off"/>
             <button [disabled]="!message || isLoading" (click)="sendMessage()" type="button" class="btn btn-outline-secondary">
                 {{isLoading ? 'Loading' : 'Send'}}
             </button>
         </div>
-        <input name="img-file" type="file" #imageInput (change)="openImageModal($event, content)" class="d-none" accept="image/*"/>
     </div>
 </ng-container>
 <ng-container *ngIf="!selectedUser">
@@ -26,18 +22,3 @@
         <p>Select a chat</p>
     </div>
 </ng-container>
-
-<ng-template #content let-modal>
-	<div class="modal-header">
-		<h4 class="modal-title" id="modal-basic-title">Image</h4>
-		<button type="button" class="btn-close" aria-label="Close" (click)="modal.close('close')"></button>
-	</div>
-	<div class="modal-body">
-        <div class="d-flex justify-content-center align-items-center">
-            <img src="{{imageUrl}}" class="app-img-size img-thumbnail" alt="image">
-        </div>
-	</div>
-	<div class="modal-footer">
-		<button type="button" class="btn btn-outline-secondary" (click)="modal.close('send')">Send</button>
-	</div>
-</ng-template>

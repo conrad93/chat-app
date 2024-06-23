@@ -1,12 +1,10 @@
 const Message = require("../models/message");
 const Conversation = require("../models/conversation");
 const { getReceiverSocketId, io } = require("../socket/socket");
-const {encrypt, decrypt} = require("../utils/cryptography");
 
 const sendMessage = async (req, res) => {
     try {
         const {message} = req.body;
-        const decryptedMessage = decrypt(message);
         const {id: receiverId} = req.params;
         const senderId = req.user._id;
 
@@ -23,7 +21,7 @@ const sendMessage = async (req, res) => {
         const newMessage = new Message({
             senderId,
             receiverId,
-            message: decryptedMessage
+            message
         });
         
         if(newMessage){
@@ -37,7 +35,7 @@ const sendMessage = async (req, res) => {
             io.to(receiverSocketId).emit("newMessage", newMessage);
         }
         
-        res.status(201).json(encrypt(JSON.stringify(newMessage)));
+        res.status(201).json(newMessage);
 
     } catch (error) {
         console.log("Error in sendMessage", error.message);
@@ -56,7 +54,7 @@ const getMessages = async (req, res) => {
         
         if(!conversation) return res.status(200).json([]);
 
-        let messages = conversation.messages.map(message => encrypt(JSON.stringify(message)));
+        let messages = conversation.messages;
 
         res.status(200).json(messages);
 

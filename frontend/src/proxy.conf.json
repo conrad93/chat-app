@@ -1,6 +1,6 @@
 {
     "/api": {
-      "target": "https://chat-app-o6ie.onrender.com",
+      "target": "http://localhost:8000",
       "secure": false,
       "logLevel": "debug",
       "changeOrigin": true
